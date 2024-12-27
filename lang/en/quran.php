@@ -10,3 +10,6 @@ $string['progress'] = 'Progress';
 $string['chapter'] = 'Chapter {$a}';
 $string['verse'] = 'Verse {$a}';
 $string['progresscompleted'] = '{$a}% completed';
+$string['quransettings'] = 'Quran settings';
+$string['targetchapter'] = 'Target Chapter';
+$string['targetverse'] = 'Target Verse';
