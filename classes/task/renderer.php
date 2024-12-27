@@ -83,7 +83,7 @@ class mod_quran_renderer extends plugin_renderer_base {
      * @return string HTML output.
      */
     public function render_progress_bar($percentage) {
-        $progress = html_writer::tag('div', '', [
+        $progress = html_writer::tag('div', round($percentage) . '%', [
             'class' => 'progress-bar-inner',
             'style' => "width: {$percentage}%;"
         ]);
