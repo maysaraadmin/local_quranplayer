@@ -7,11 +7,16 @@ $context = context_module::instance($id);
 require_login();
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('yourprogress', 'mod_quran'));
+echo $OUTPUT->heading(get_string('yourprogress', 'mod_quran'), ['id' => 'progress-heading']);
 
 // Fetch progress.
 global $DB, $USER;
-$progress = $DB->get_records('quran_progress', ['userid' => $USER->id]);
+try {
+    $progress = $DB->get_records('quran_progress', ['userid' => $USER->id]);
+} catch (dml_exception $e) {
+    debugging('Failed to fetch progress: ' . $e->getMessage(), DEBUG_DEVELOPER);
+    $progress = [];
+}
 
 // Display progress.
 if (!empty($progress)) {
@@ -20,11 +25,12 @@ if (!empty($progress)) {
             get_string('chapter', 'mod_quran', $record->chapter) . ", " .
             get_string('verse', 'mod_quran', $record->verse) . ", " .
             ($record->memorized ? 'Memorized' : 'Not Memorized'),
-            'progress-item'
+            'progress-item',
+            ['aria-label' => 'Progress Item']
         );
     }
 } else {
-    echo html_writer::tag('p', 'No progress recorded yet.');
+    echo html_writer::tag('p', 'No progress recorded yet.', ['aria-label' => 'No Progress']);
 }
 
 echo $OUTPUT->footer();

@@ -13,5 +13,33 @@
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
             </KEYS>
         </TABLE>
+        <TABLE NAME="quran_progress" COMMENT="Stores user progress for Quran memorization">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+                <FIELD NAME="chapter" TYPE="int" LENGTH="10" NOTNULL="true"/>
+                <FIELD NAME="verse" TYPE="int" LENGTH="10" NOTNULL="true"/>
+                <FIELD NAME="memorized" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="userid_chapter_verse" TYPE="unique" FIELDS="userid,chapter,verse"/>
+            </KEYS>
+        </TABLE>
+
+        <!-- New table for storing Quran verses -->
+        <TABLE NAME="quran_verses" COMMENT="Stores Quran verses">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="chapter" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Chapter number"/>
+                <FIELD NAME="verse" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Verse number"/>
+                <FIELD NAME="text" TYPE="text" NOTNULL="true" COMMENT="Verse text in Uthmani script"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="chapter_verse" TYPE="unique" FIELDS="chapter,verse"/>
+            </KEYS>
+        </TABLE>
     </TABLES>
 </XMLDB>
