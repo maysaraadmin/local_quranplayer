@@ -18,7 +18,7 @@ class sura_selection_form extends moodleform {
 
     private function get_suras() {
         // Load Sura names from quran.json.
-        $quran_data_path = __DIR__ . '/../../quran_data/quran.json';
+        $quran_data_path = __DIR__ . '/local/quranmemorizer/quran_data/quran.json';
         if (file_exists($quran_data_path)) {
             $quran_data = json_decode(file_get_contents($quran_data_path), true);
             if (json_last_error() === JSON_ERROR_NONE) {
