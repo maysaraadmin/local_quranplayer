@@ -5,6 +5,10 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
     public function render_sura_selection($sura) {
         global $OUTPUT;
 
+        if (empty($sura)) {
+            return $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
+        }
+
         $output = '';
         $output .= $OUTPUT->heading(get_string('selectsura', 'local_quranmemorizer'), 2);
         $output .= $this->render_sura_details($sura);
@@ -59,7 +63,7 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
 
     private function get_audio_url($sura_number) {
         $audio_file = sprintf('%03d.mp3', $sura_number);
-        $audio_path = __DIR__ . '/local/quranmemorizer/audio/Qari1/' . $audio_file;
+        $audio_path = __DIR__ . '/../../audio/Qari1/' . $audio_file;
 
         if (file_exists($audio_path)) {
             return new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);

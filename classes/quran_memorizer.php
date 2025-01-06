@@ -1,8 +1,8 @@
 <?php
 class local_quranmemorizer {
     public static function get_sura($sura_id) {
-        // Correct path to quran.json.
-        $quran_data_path = __DIR__ . '/local/quranmemorizer/quran_data/quran.json';
+        // Correct path to quran.json relative to Moodle root.
+        $quran_data_path = __DIR__ . '/../../../quran_data/quran.json';
         if (file_exists($quran_data_path)) {
             $quran_data = json_decode(file_get_contents($quran_data_path), true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -28,12 +28,12 @@ class local_quranmemorizer {
             debugging('quran.json file not found at ' . $quran_data_path, DEBUG_DEVELOPER);
         }
 
-
+        return null; // Return null if Sura is not found.
     }
 
     private static function get_audio_url($sura_number) {
         $audio_file = sprintf('%03d.mp3', $sura_number); // Ensure the file name is in the format 001.mp3, 002.mp3, etc.
-        $audio_path = __DIR__ . '/local/quranmemorizer/audio/Qari1/' . $audio_file;
+        $audio_path = __DIR__ . '/../../../audio/Qari1/' . $audio_file;
 
         if (file_exists($audio_path)) {
             return new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);

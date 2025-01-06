@@ -30,9 +30,13 @@ if ($form->is_cancelled()) {
 } else if ($data = $form->get_data()) {
     if (!empty($data->sura)) {
         $sura = local_quranmemorizer::get_sura($data->sura);
-        echo $renderer->render_sura_selection($sura); // Use the plugin's renderer.
+        if ($sura) {
+            echo $renderer->render_sura_selection($sura); // Use the plugin's renderer.
+        } else {
+            echo $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
+        }
     } else {
-        debugging('No Sura selected', DEBUG_DEVELOPER);
+        echo $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
     }
 } else {
     $form->display();

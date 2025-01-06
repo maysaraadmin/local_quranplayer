@@ -10,3 +10,4 @@ $string['playaudio'] = 'Play Audio';
 $string['stopaudio'] = 'Stop Audio';
 $string['volume'] = 'Volume';
 $string['noaudioavailable'] = 'No audio available for this Sura.';
+$string['nosuraselected'] = 'No Sura selected.';
