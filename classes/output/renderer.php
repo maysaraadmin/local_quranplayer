@@ -1,4 +1,7 @@
 <?php
+
+defined('MOODLE_INTERNAL') || die();
+
 class local_quranmemorizer_renderer extends plugin_renderer_base {
     public function render_sura_selection($sura) {
         global $OUTPUT;
