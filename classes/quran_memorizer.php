@@ -20,7 +20,11 @@ class local_quranmemorizer {
                         );
                     }
                 }
+            } else {
+                debugging('Error decoding quran.json: ' . json_last_error_msg(), DEBUG_DEVELOPER);
             }
+        } else {
+            debugging('quran.json file not found at ' . $quran_data_path, DEBUG_DEVELOPER);
         }
 
         // Fallback data if quran.json is not found or invalid.
@@ -41,14 +45,14 @@ class local_quranmemorizer {
 
     private static function get_audio_url($sura_number) {
         $audio_file = sprintf('%03d.mp3', $sura_number); // Ensure the file name is in the format 001.mp3, 002.mp3, etc.
-        $audio_url = 'http://127.0.0.1/dev/local/quranmemorizer/audio/Qari1/' . $audio_file;
+        $audio_url = new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);
 
         // Check if the audio file exists (optional, if you want to validate the URL).
-        // Note: This is a basic check and may not work for remote URLs.
-        $headers = @get_headers($audio_url);
-        if ($headers && strpos($headers[0], '200') !== false) {
-            return $audio_url;
+        $audio_path = __DIR__ . '/../../audio/Qari1/' . $audio_file;
+        if (file_exists($audio_path)) {
+            return $audio_url->out();
         } else {
+            debugging('Audio file not found: ' . $audio_path, DEBUG_DEVELOPER);
             return ''; // Return empty if audio file not found.
         }
     }

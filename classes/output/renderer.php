@@ -54,6 +54,7 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
         if (file_exists($audio_path)) {
             return new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);
         } else {
+            debugging('Audio file not found: ' . $audio_path, DEBUG_DEVELOPER);
             return ''; // Return empty if audio file not found.
         }
     }
