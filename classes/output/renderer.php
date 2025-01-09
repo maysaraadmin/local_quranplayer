@@ -32,7 +32,7 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
 
     private function render_audio_player($sura) {
         $output = '';
-        if (isset($sura['id']) && isset($sura['audio_url'])) { // Ensure 'id' and 'audio_url' keys exist.
+        if (isset($sura['id']) && isset($sura['audio_url'])) {
             $audio_url = $sura['audio_url'];
             if (!empty($audio_url)) {
                 // Display the audio file name for debugging.
