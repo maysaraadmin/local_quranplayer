@@ -10,7 +10,7 @@ class sura_selection_form extends moodleform {
         // Sura selection dropdown.
         $suras = $this->get_suras();
         $mform->addElement('select', 'sura', get_string('sura', 'local_quranmemorizer'), $suras);
-        $mform->setDefault('sura', 1);
+        $mform->setDefault('sura', 1); // Default to Sura 1 (Al-Fatiha).
 
         // Submit button.
         $mform->addElement('submit', 'submitbutton', get_string('startmemorization', 'local_quranmemorizer'));
@@ -24,7 +24,7 @@ class sura_selection_form extends moodleform {
             if (json_last_error() === JSON_ERROR_NONE) {
                 $suras = [];
                 foreach ($quran_data as $sura) {
-                    $suras[$sura['id']] = $sura['name']; // Use 'id' instead of 'number'.
+                    $suras[$sura['id']] = $sura['name']; // Use 'id' as the key.
                 }
                 return $suras;
             } else {

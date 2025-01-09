@@ -32,8 +32,8 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
 
     private function render_audio_player($sura) {
         $output = '';
-        if (isset($sura['id'])) { // Ensure 'id' key exists.
-            $audio_url = $this->get_audio_url($sura['id']);
+        if (isset($sura['id']) && isset($sura['audio_url'])) { // Ensure 'id' and 'audio_url' keys exist.
+            $audio_url = $sura['audio_url'];
             if (!empty($audio_url)) {
                 // Display the audio file name for debugging.
                 $audio_file_name = sprintf('%03d.mp3', $sura['id']);
@@ -55,21 +55,9 @@ class local_quranmemorizer_renderer extends plugin_renderer_base {
                 $output .= html_writer::tag('p', get_string('noaudioavailable', 'local_quranmemorizer'));
             }
         } else {
-            $output .= html_writer::tag('p', 'Sura ID is missing.');
+            $output .= html_writer::tag('p', 'Sura ID or audio URL is missing.');
         }
 
         return $output;
-    }
-
-    private function get_audio_url($sura_number) {
-        $audio_file = sprintf('%03d.mp3', $sura_number);
-        $audio_path = __DIR__ . '/../../audio/Qari1/' . $audio_file;
-
-        if (file_exists($audio_path)) {
-            return new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);
-        } else {
-            debugging('Audio file not found: ' . $audio_path, DEBUG_DEVELOPER);
-            return ''; // Return empty if audio file not found.
-        }
     }
 }

@@ -2,12 +2,13 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
+// Set up the admin page.
 admin_externalpage_setup('local_quranmemorizer_insert_data');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('insertdata', 'local_quranmemorizer'));
 
-// Load quran.json
+// Load quran.json.
 $quran_data_path = __DIR__ . '/../quran_data/quran.json';
 if (!file_exists($quran_data_path)) {
     echo $OUTPUT->notification(get_string('quranjsonnotfound', 'local_quranmemorizer'), 'notifyerror');
@@ -22,33 +23,31 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     die();
 }
 
-// Insert data into the database
+// Insert data into the database.
 global $DB;
 $transaction = $DB->start_delegated_transaction();
 
 try {
     foreach ($quran_data as $sura) {
-        // Insert Sura
-        $sura_id = $DB->insert_record('local_quranmemorizer_suras', [
-            'id' => $sura['id'],
-            'name' => $sura['name'],
-        ]);
+        // Insert Sura.
+        $sura_record = new stdClass();
+        $sura_record->id = $sura['id'];
+        $sura_record->name = $sura['name'];
+        $DB->insert_record('local_quranmemorizer_suras', $sura_record);
 
-        // Insert Ayas
+        // Insert Ayas.
         foreach ($sura['verses'] as $verse) {
-            $DB->insert_record('local_quranmemorizer_ayas', [
-                'sura_id' => $sura['id'],
-                'text' => $verse['text'],
-            ]);
+            $aya_record = new stdClass();
+            $aya_record->sura_id = $sura['id'];
+            $aya_record->text = $verse['text'];
+            $DB->insert_record('local_quranmemorizer_ayas', $aya_record);
         }
 
-        // Insert Audio Path
-        $audio_file = sprintf('%03d.mp3', $sura['id']);
-        $audio_path = '/local/quranmemorizer/audio/Qari1/' . $audio_file;
-        $DB->insert_record('local_quranmemorizer_audio', [
-            'sura_id' => $sura['id'],
-            'audio_path' => $audio_path,
-        ]);
+        // Insert Audio Path.
+        $audio_record = new stdClass();
+        $audio_record->sura_id = $sura['id'];
+        $audio_record->audio_path = '/local/quranmemorizer/audio/Qari1/' . sprintf('%03d.mp3', $sura['id']);
+        $DB->insert_record('local_quranmemorizer_audio', $audio_record);
     }
 
     $transaction->allow_commit();
