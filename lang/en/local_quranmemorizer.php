@@ -16,3 +16,7 @@ $string['quranjsonnotfound'] = 'quran.json file not found.';
 $string['quranjsondecodeerror'] = 'Error decoding quran.json.';
 $string['datainsertedsuccessfully'] = 'Data inserted successfully.';
 $string['datainsertionfailed'] = 'Data insertion failed.';
+$string['enableplugin'] = 'Enable Quran Memorizer Plugin';
+$string['enableplugin_desc'] = 'Enable or disable the Quran Memorizer plugin.';
+$string['quranjsonpath'] = 'Quran JSON File Path';
+$string['quranjsonpath_desc'] = 'The path to the Quran JSON file containing Sura and Aya data.';

@@ -8,14 +8,17 @@ admin_externalpage_setup('local_quranmemorizer_insert_data');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('insertdata', 'local_quranmemorizer'));
 
-// Load quran.json.
+// Define the path to quran.json.
 $quran_data_path = __DIR__ . '/../quran_data/quran.json';
+
+// Check if the file exists.
 if (!file_exists($quran_data_path)) {
     echo $OUTPUT->notification(get_string('quranjsonnotfound', 'local_quranmemorizer'), 'notifyerror');
     echo $OUTPUT->footer();
     die();
 }
 
+// Load and decode the JSON file.
 $quran_data = json_decode(file_get_contents($quran_data_path), true);
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo $OUTPUT->notification(get_string('quranjsondecodeerror', 'local_quranmemorizer'), 'notifyerror');
@@ -50,9 +53,11 @@ try {
         $DB->insert_record('local_quranmemorizer_audio', $audio_record);
     }
 
+    // Commit the transaction if everything is successful.
     $transaction->allow_commit();
     echo $OUTPUT->notification(get_string('datainsertedsuccessfully', 'local_quranmemorizer'), 'notifysuccess');
 } catch (Exception $e) {
+    // Rollback the transaction in case of an error.
     $transaction->rollback($e);
     echo $OUTPUT->notification(get_string('datainsertionfailed', 'local_quranmemorizer'), 'notifyerror');
 }
