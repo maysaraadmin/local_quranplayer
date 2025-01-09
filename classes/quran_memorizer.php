@@ -1,45 +1,25 @@
 <?php
 class local_quranmemorizer {
     public static function get_sura($sura_id) {
-        // Correct path to quran.json relative to Moodle root.
-        $quran_data_path = __DIR__ . '/../../../quran_data/quran.json';
-        if (file_exists($quran_data_path)) {
-            $quran_data = json_decode(file_get_contents($quran_data_path), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                foreach ($quran_data as $sura) {
-                    if ($sura['id'] == $sura_id) {
-                        // Extract verses text into an array.
-                        $verses = array_map(function($verse) {
-                            return $verse['text'];
-                        }, $sura['verses']);
+        global $DB;
 
-                        return array(
-                            'id' => $sura['id'], // Ensure 'id' is included.
-                            'name' => $sura['name'],
-                            'ayas' => $verses,
-                            'audio_url' => self::get_audio_url($sura['id']),
-                        );
-                    }
-                }
-            } else {
-                debugging('Error decoding quran.json: ' . json_last_error_msg(), DEBUG_DEVELOPER);
-            }
-        } else {
-            debugging('quran.json file not found at ' . $quran_data_path, DEBUG_DEVELOPER);
+        $sura = $DB->get_record('local_quranmemorizer_suras', ['id' => $sura_id]);
+        if (!$sura) {
+            return null;
         }
 
-        return null; // Return null if Sura is not found.
-    }
+        $ayas = $DB->get_records('local_quranmemorizer_ayas', ['sura_id' => $sura_id], 'id ASC');
+        $verses = array_map(function($aya) {
+            return $aya->text;
+        }, $ayas);
 
-    private static function get_audio_url($sura_number) {
-        $audio_file = sprintf('%03d.mp3', $sura_number); // Ensure the file name is in the format 001.mp3, 002.mp3, etc.
-        $audio_path = __DIR__ . '/../../../audio/Qari1/' . $audio_file;
+        $audio = $DB->get_record('local_quranmemorizer_audio', ['sura_id' => $sura_id]);
 
-        if (file_exists($audio_path)) {
-            return new moodle_url('/local/quranmemorizer/audio/Qari1/' . $audio_file);
-        } else {
-            debugging('Audio file not found: ' . $audio_path, DEBUG_DEVELOPER);
-            return ''; // Return empty if audio file not found.
-        }
+        return [
+            'id' => $sura->id,
+            'name' => $sura->name,
+            'ayas' => $verses,
+            'audio_url' => $audio ? new moodle_url($audio->audio_path) : '',
+        ];
     }
 }
