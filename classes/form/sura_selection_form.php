@@ -19,13 +19,19 @@ class sura_selection_form extends moodleform {
     private function get_suras() {
         global $DB;
 
-        // Fetch Sura names from the database.
-        $suras = $DB->get_records('local_quranmemorizer_suras', [], 'id ASC', 'id, name');
-        $sura_list = [];
-        foreach ($suras as $sura) {
-            $sura_list[$sura->id] = $sura->name;
-        }
+        try {
+            // Fetch Sura names from the database.
+            $suras = $DB->get_records('local_quranmemorizer_suras', [], 'id ASC', 'id, name');
+            $sura_list = [];
+            foreach ($suras as $sura) {
+                $sura_list[$sura->id] = $sura->name;
+            }
 
-        return $sura_list;
+            return $sura_list;
+        } catch (dml_exception $e) {
+            // Log the error and return an empty array.
+            debugging('Error fetching suras: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            return [];
+        }
     }
 }
