@@ -36,6 +36,9 @@ if ($form->is_cancelled()) {
         // Fetch the selected Sura from the database.
         $sura = local_quranmemorizer::get_sura($data->sura);
         if ($sura) {
+            // Ensure the audio file path is correctly set.
+            $sura['audio_url'] = $CFG->wwwroot . '/local/quranmemorizer/audio/Qari1/' . sprintf('%03d.mp3', $sura['id']);
+
             // Render the selected Sura's details.
             echo $renderer->render_sura_selection($sura);
         } else {
