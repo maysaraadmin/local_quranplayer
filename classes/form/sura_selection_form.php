@@ -17,29 +17,15 @@ class sura_selection_form extends moodleform {
     }
 
     private function get_suras() {
-        // Load Sura names from quran.json.
-        $quran_data_path = __DIR__ . '/../../../quran_data/quran.json';
-        if (file_exists($quran_data_path)) {
-            $quran_data = json_decode(file_get_contents($quran_data_path), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $suras = [];
-                foreach ($quran_data as $sura) {
-                    $suras[$sura['id']] = $sura['name']; // Use 'id' as the key.
-                }
-                return $suras;
-            } else {
-                debugging('Error decoding quran.json: ' . json_last_error_msg(), DEBUG_DEVELOPER);
-            }
-        } else {
-            debugging('quran.json file not found at ' . $quran_data_path, DEBUG_DEVELOPER);
+        global $DB;
+
+        // Fetch Sura names from the database.
+        $suras = $DB->get_records('local_quranmemorizer_suras', [], 'id ASC', 'id, name');
+        $sura_list = [];
+        foreach ($suras as $sura) {
+            $sura_list[$sura->id] = $sura->name;
         }
 
-        // Fallback data if quran.json is not found or invalid.
-        return array(
-            1 => "الفاتحة",
-            2 => "البقرة",
-            // ... (rest of the Sura names)
-            114 => "الناس",
-        );
+        return $sura_list;
     }
 }
