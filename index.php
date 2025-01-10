@@ -26,19 +26,24 @@ echo $OUTPUT->header();
 $form = new sura_selection_form();
 
 if ($form->is_cancelled()) {
-    // Handle form cancel operation, if needed.
+    // If the form is cancelled, redirect to the plugin's main page.
+    redirect(new moodle_url('/local/quranmemorizer/index.php'));
 } else if ($data = $form->get_data()) {
-    if (!empty($data->sura)) {
+    // Ensure a Sura is selected.
+    if (empty($data->sura)) {
+        echo $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
+    } else {
+        // Fetch the selected Sura from the database.
         $sura = local_quranmemorizer::get_sura($data->sura);
         if ($sura) {
-            echo $renderer->render_sura_selection($sura); // Use the plugin's renderer.
+            // Render the selected Sura's details.
+            echo $renderer->render_sura_selection($sura);
         } else {
             echo $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
         }
-    } else {
-        echo $OUTPUT->notification(get_string('nosuraselected', 'local_quranmemorizer'), 'notifyerror');
     }
 } else {
+    // Display the form if no data has been submitted.
     $form->display();
 }
 

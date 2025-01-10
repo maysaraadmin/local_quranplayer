@@ -21,45 +21,49 @@ if (!file_exists($quran_data_path)) {
 // Load and decode the JSON file.
 $quran_data = json_decode(file_get_contents($quran_data_path), true);
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo $OUTPUT->notification(get_string('quranjsondecodeerror', 'local_quranmemorizer'), 'notifyerror');
+    echo $OUTPUT->notification(get_string('quranjsondecodeerror', 'local_quranmemorizer') . ': ' . json_last_error_msg(), 'notifyerror');
     echo $OUTPUT->footer();
     die();
 }
 
-// Insert data into the database.
-global $DB;
-$transaction = $DB->start_delegated_transaction();
-
-try {
-    foreach ($quran_data as $sura) {
-        // Insert Sura.
-        $sura_record = new stdClass();
-        $sura_record->id = $sura['id'];
-        $sura_record->name = $sura['name'];
-        $DB->insert_record('local_quranmemorizer_suras', $sura_record);
-
-        // Insert Ayas.
-        foreach ($sura['verses'] as $verse) {
-            $aya_record = new stdClass();
-            $aya_record->sura_id = $sura['id'];
-            $aya_record->text = $verse['text'];
-            $DB->insert_record('local_quranmemorizer_ayas', $aya_record);
-        }
-
-        // Insert Audio Path.
-        $audio_record = new stdClass();
-        $audio_record->sura_id = $sura['id'];
-        $audio_record->audio_path = '/local/quranmemorizer/audio/Qari1/' . sprintf('%03d.mp3', $sura['id']);
-        $DB->insert_record('local_quranmemorizer_audio', $audio_record);
-    }
-
-    // Commit the transaction if everything is successful.
-    $transaction->allow_commit();
-    echo $OUTPUT->notification(get_string('datainsertedsuccessfully', 'local_quranmemorizer'), 'notifysuccess');
-} catch (Exception $e) {
-    // Rollback the transaction in case of an error.
-    $transaction->rollback($e);
-    echo $OUTPUT->notification(get_string('datainsertionfailed', 'local_quranmemorizer'), 'notifyerror');
+// Validate JSON structure.
+if (!is_array($quran_data)) {
+    echo $OUTPUT->notification(get_string('quranjsondecodeerror', 'local_quranmemorizer') . ': Invalid JSON structure.', 'notifyerror');
+    echo $OUTPUT->footer();
+    die();
 }
+
+// Add a button to insert data.
+echo html_writer::tag('button', get_string('insertdata', 'local_quranmemorizer'), [
+    'onclick' => 'insertData()',
+    'style' => 'margin-bottom: 20px;'
+]);
+
+echo html_writer::tag('div', '', ['id' => 'insert-data-result']);
+
+// JavaScript function to handle the data insertion via AJAX.
+echo "
+<script>
+function insertData() {
+    var resultDiv = document.getElementById('insert-data-result');
+    resultDiv.innerHTML = 'Inserting data...';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'insert_data_ajax.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            resultDiv.innerHTML = xhr.responseText;
+        } else {
+            resultDiv.innerHTML = 'Error: ' + xhr.statusText;
+        }
+    };
+    xhr.onerror = function() {
+        resultDiv.innerHTML = 'Request failed';
+    };
+    xhr.send();
+}
+</script>
+";
 
 echo $OUTPUT->footer();
