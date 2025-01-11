@@ -1,0 +1,16 @@
+<div class="local-quranplayer">
+    <label for="quranplayer-select">{{#str}}selectfile, local_quranplayer{{/str}}</label>
+    <select id="quranplayer-select">
+        {{#options}}
+            <option value="{{value}}">{{text}}</option>
+        {{/options}}
+    </select>
+    <div id="quran-text">
+        <h3>{{#str}}qurantext, local_quranplayer{{/str}}</h3>
+        <pre id="quran-content"></pre>
+    </div>
+    <audio id="quranplayer" controls>
+        <source id="quranplayer-source" src="" type="audio/mpeg">
+        {{#str}}noaudio, local_quranplayer{{/str}}
+    </audio>
+</div>

@@ -1,34 +1,30 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    // Create a new settings page for the plugin.
-    $settings = new admin_settingpage('local_quranmemorizer', get_string('pluginname', 'local_quranmemorizer'));
-
-    // Add the settings page to the "Local plugins" category in the admin menu.
+    $settings = new admin_settingpage('local_quranplayer', get_string('pluginname', 'local_quranplayer'));
     $ADMIN->add('localplugins', $settings);
 
-    // Add a setting to enable/disable the plugin (optional).
-    $settings->add(new admin_setting_configcheckbox(
-        'local_quranmemorizer/enabled',
-        get_string('enableplugin', 'local_quranmemorizer'),
-        get_string('enableplugin_desc', 'local_quranmemorizer'),
-        1 // Default value (1 = enabled, 0 = disabled).
-    ));
-
-    // Add a setting for the path to the Quran JSON file.
     $settings->add(new admin_setting_configtext(
-        'local_quranmemorizer/quranjsonpath',
-        get_string('quranjsonpath', 'local_quranmemorizer'),
-        get_string('quranjsonpath_desc', 'local_quranmemorizer'),
-        '/local/quranmemorizer/quran_data/quran.json', // Default path.
-        PARAM_TEXT // Parameter type.
-    ));
-
-    // Add a link to the data insertion page in the admin menu.
-    $ADMIN->add('localplugins', new admin_externalpage(
-        'local_quranmemorizer_insert_data',
-        get_string('insertdata', 'local_quranmemorizer'),
-        new moodle_url('/local/quranmemorizer/insert_data.php')
+        'local_quranplayer/mp3path',
+        get_string('mp3path', 'local_quranplayer'),
+        get_string('mp3path_desc', 'local_quranplayer'),
+        $CFG->dirroot . '/local/quranplayer/mp3/',
+        PARAM_TEXT
     ));
 }
