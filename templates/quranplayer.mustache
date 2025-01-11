@@ -1,16 +1,49 @@
 <div class="local-quranplayer">
-    <label for="quranplayer-select">{{#str}}selectfile, local_quranplayer{{/str}}</label>
+    <label for="quranplayer-select">{{selectfile}}</label>
     <select id="quranplayer-select">
         {{#options}}
             <option value="{{value}}">{{text}}</option>
         {{/options}}
     </select>
     <div id="quran-text">
-        <h3>{{#str}}qurantext, local_quranplayer{{/str}}</h3>
+        <h3>{{qurantext}}</h3>
         <pre id="quran-content"></pre>
     </div>
     <audio id="quranplayer" controls>
         <source id="quranplayer-source" src="" type="audio/mpeg">
-        {{#str}}noaudio, local_quranplayer{{/str}}
+        {{noaudio}}
     </audio>
+    <div id="quran-error" class="alert alert-danger" style="display: none;"></div>
 </div>
+<script>
+    const select = document.getElementById('quranplayer-select');
+    const audio = document.getElementById('quranplayer');
+    const source = document.getElementById('quranplayer-source');
+    const quranContent = document.getElementById('quran-content');
+    const errorDiv = document.getElementById('quran-error');
+
+    select.addEventListener('change', function() {
+        const selectedFile = this.value;
+        source.src = '{{wwwroot}}/local/quranplayer/mp3/' + encodeURIComponent(selectedFile);
+        audio.load();
+
+        fetch('{{wwwroot}}/local/quranplayer/get_quran_text.php?file=' + encodeURIComponent(selectedFile))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load Quran text.');
+                }
+                return response.text();
+            })
+            .then(text => {
+                quranContent.textContent = text;
+                errorDiv.style.display = 'none';
+            })
+            .catch(error => {
+                quranContent.textContent = '';
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            });
+    });
+
+    select.dispatchEvent(new Event('change'));
+</script>

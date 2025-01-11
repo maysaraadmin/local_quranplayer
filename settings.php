@@ -27,4 +27,11 @@ if ($hassiteconfig) {
         $CFG->dirroot . '/local/quranplayer/mp3/',
         PARAM_TEXT
     ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_quranplayer/enablelogging',
+        get_string('enablelogging', 'local_quranplayer'),
+        get_string('enablelogging_desc', 'local_quranplayer'),
+        0
+    ));
 }

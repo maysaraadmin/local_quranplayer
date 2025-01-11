@@ -22,6 +22,7 @@ $capabilities = [
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'user' => CAP_ALLOW,
+            'guest' => CAP_PREVENT, // Prevent guests from viewing the Quran player
         ],
     ],
 ];

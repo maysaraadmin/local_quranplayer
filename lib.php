@@ -19,7 +19,7 @@ defined('MOODLE_INTERNAL') || die();
 class local_quranplayer {
 
     public static function render_player() {
-        global $CFG;
+        global $CFG, $OUTPUT;
 
         $mp3path = get_config('local_quranplayer', 'mp3path');
         if (empty($mp3path) || !is_dir($mp3path)) {
@@ -46,57 +46,24 @@ class local_quranplayer {
             "المسد", "الإخلاص", "الفلق", "الناس"
         ];
 
-        $options = '';
+        $options = [];
         foreach ($files as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) === 'mp3') {
                 $surahNumber = intval(pathinfo($file, PATHINFO_FILENAME));
                 if ($surahNumber >= 1 && $surahNumber <= 114) {
                     $surahName = $quranChapters[$surahNumber - 1];
-                    $options .= "<option value='" . s($file) . "'>$surahNumber. $surahName</option>";
+                    $options[] = ['value' => $file, 'text' => "$surahNumber. $surahName"];
                 }
             }
         }
 
-        $html = <<<HTML
-<div class="local-quranplayer">
-    <label for="quranplayer-select">{{#str}}selectfile, local_quranplayer{{/str}}</label>
-    <select id="quranplayer-select">
-        $options
-    </select>
-    <div id="quran-text">
-        <h3>{{#str}}qurantext, local_quranplayer{{/str}}</h3>
-        <pre id="quran-content"></pre>
-    </div>
-    <audio id="quranplayer" controls>
-        <source id="quranplayer-source" src="" type="audio/mpeg">
-        {{#str}}noaudio, local_quranplayer{{/str}}
-    </audio>
-</div>
-<script>
-    const select = document.getElementById('quranplayer-select');
-    const audio = document.getElementById('quranplayer');
-    const source = document.getElementById('quranplayer-source');
-    const quranContent = document.getElementById('quran-content');
+        $templatecontext = [
+            'selectfile' => get_string('selectfile', 'local_quranplayer'),
+            'qurantext' => get_string('qurantext', 'local_quranplayer'),
+            'noaudio' => get_string('noaudio', 'local_quranplayer'),
+            'options' => $options
+        ];
 
-    select.addEventListener('change', function() {
-        const selectedFile = this.value;
-        source.src = '{$CFG->wwwroot}/local/quranplayer/mp3/' + encodeURIComponent(selectedFile);
-        audio.load();
-
-        fetch('{$CFG->wwwroot}/local/quranplayer/get_quran_text.php?file=' + encodeURIComponent(selectedFile))
-            .then(response => response.text())
-            .then(text => {
-                quranContent.textContent = text;
-            })
-            .catch(error => {
-                quranContent.textContent = 'Failed to load Quran text.';
-            });
-    });
-
-    select.dispatchEvent(new Event('change'));
-</script>
-HTML;
-
-        return $html;
+        return $OUTPUT->render_from_template('local_quranplayer/quranplayer', $templatecontext);
     }
 }
