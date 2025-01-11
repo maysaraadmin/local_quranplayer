@@ -21,3 +21,4 @@ $string['qurantext'] = 'Quran Text';
 $string['noaudiofiles'] = 'No audio files found.';
 $string['nodirectory'] = 'MP3 directory not found.';
 $string['noqurantext'] = 'Quran text file not found.';
+$string['noaudio'] = 'Your browser does not support the audio element.';

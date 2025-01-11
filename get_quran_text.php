@@ -18,6 +18,11 @@ require_once('../../config.php');
 defined('MOODLE_INTERNAL') || die();
 
 $file = optional_param('file', '', PARAM_TEXT);
+if (empty($file) || !preg_match('/^\d{3}\.mp3$/', $file)) {
+    echo get_string('noqurantext', 'local_quranplayer');
+    exit;
+}
+
 $quranfile = __DIR__ . '/quran.txt';
 
 if (!file_exists($quranfile)) {

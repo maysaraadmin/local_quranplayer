@@ -22,7 +22,7 @@ class local_quranplayer {
         global $CFG;
 
         $mp3path = get_config('local_quranplayer', 'mp3path');
-        if (!is_dir($mp3path)) {
+        if (empty($mp3path) || !is_dir($mp3path)) {
             return '<div class="alert alert-error">' . get_string('nodirectory', 'local_quranplayer') . '</div>';
         }
 
@@ -60,17 +60,17 @@ class local_quranplayer {
 
         $html = <<<HTML
 <div class="local-quranplayer">
-    <label for="quranplayer-select">Select a chapter to play:</label>
+    <label for="quranplayer-select">{{#str}}selectfile, local_quranplayer{{/str}}</label>
     <select id="quranplayer-select">
         $options
     </select>
     <div id="quran-text">
-        <h3>Quran Text</h3>
+        <h3>{{#str}}qurantext, local_quranplayer{{/str}}</h3>
         <pre id="quran-content"></pre>
     </div>
     <audio id="quranplayer" controls>
         <source id="quranplayer-source" src="" type="audio/mpeg">
-        Your browser does not support the audio element.
+        {{#str}}noaudio, local_quranplayer{{/str}}
     </audio>
 </div>
 <script>
