@@ -36,7 +36,19 @@ $selectedText = '';
 $handle = fopen($quranfile, 'r');
 if ($handle) {
     while (($line = fgets($handle)) !== false) {
-        list($lineSurah, $lineVerse, $text) = explode('|', $line, 3);
+        $line = trim($line); // Remove any extra whitespace or newlines
+        if (empty($line)) {
+            continue; // Skip empty lines
+        }
+
+        // Split the line into parts using the pipe character
+        $parts = explode('|', $line, 3);
+        if (count($parts) < 3) {
+            continue; // Skip invalid lines
+        }
+
+        list($lineSurah, $lineVerse, $text) = $parts;
+
         if ($lineSurah == $surahNumber) {
             $selectedText .= "$lineVerse. $text\n";
         }

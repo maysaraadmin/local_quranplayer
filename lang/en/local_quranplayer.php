@@ -24,3 +24,5 @@ $string['noqurantext'] = 'Quran text file not found. Please ensure the text file
 $string['noaudio'] = 'Your browser does not support the audio element. Please use a modern browser.';
 $string['mp3path'] = 'MP3 Path';
 $string['mp3path_desc'] = 'The path to the directory containing the Quran MP3 files. Ensure the path is correct and accessible.';
+$string['enablelogging'] = 'Enable Logging ';
+$string['enablelogging_desc'] = 'Enable Logging Desc';
