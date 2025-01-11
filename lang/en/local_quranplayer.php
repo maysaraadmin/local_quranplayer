@@ -26,5 +26,3 @@ $string['mp3path'] = 'MP3 Path';
 $string['mp3path_desc'] = 'The path to the directory containing the Quran MP3 files. Ensure the path is correct and accessible.';
 $string['enablelogging'] = 'Enable Logging';
 $string['enablelogging_desc'] = 'Enable logging of user interactions with the Quran player.';
-$string['selectfile'] = 'Slect File ';
-$string['qurantext'] = 'Quran Text';

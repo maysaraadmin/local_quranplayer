@@ -78,7 +78,7 @@ class local_quranplayer {
     </div>
     <audio id="quranplayer" controls>
         <source id="quranplayer-source" src="" type="audio/mpeg">
-        {{#str}}noaudio, local_quranplayer{{/str}}
+        Your browser does not support the audio element.
     </audio>
 </div>
 <script>
