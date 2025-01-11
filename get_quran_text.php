@@ -30,19 +30,18 @@ if (!file_exists($quranfile)) {
     exit;
 }
 
-// Extract surah number from the file name (e.g., 001.mp3 -> 1)
 $surahNumber = intval(pathinfo($file, PATHINFO_FILENAME));
 
-$qurantext = file_get_contents($quranfile);
-$lines = explode("\n", $qurantext);
-
 $selectedText = '';
-foreach ($lines as $line) {
-    // Each line is in the format "surah|verse|text"
-    list($lineSurah, $lineVerse, $text) = explode('|', $line, 3);
-    if ($lineSurah == $surahNumber) {
-        $selectedText .= "$lineVerse. $text\n";
+$handle = fopen($quranfile, 'r');
+if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+        list($lineSurah, $lineVerse, $text) = explode('|', $line, 3);
+        if ($lineSurah == $surahNumber) {
+            $selectedText .= "$lineVerse. $text\n";
+        }
     }
+    fclose($handle);
 }
 
 if (empty($selectedText)) {

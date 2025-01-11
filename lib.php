@@ -31,7 +31,6 @@ class local_quranplayer {
             return '<div class="alert alert-warning">' . get_string('noaudiofiles', 'local_quranplayer') . '</div>';
         }
 
-        // List of Quran chapter names
         $quranChapters = [
             "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
             "هود", "يوسف", "الرعد", "ابراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
@@ -50,9 +49,9 @@ class local_quranplayer {
         $options = '';
         foreach ($files as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) === 'mp3') {
-                $surahNumber = intval(pathinfo($file, PATHINFO_FILENAME)); // Extract surah number from file name (e.g., 001.mp3 -> 1)
+                $surahNumber = intval(pathinfo($file, PATHINFO_FILENAME));
                 if ($surahNumber >= 1 && $surahNumber <= 114) {
-                    $surahName = $quranChapters[$surahNumber - 1]; // Get surah name from the list
+                    $surahName = $quranChapters[$surahNumber - 1];
                     $options .= "<option value='" . s($file) . "'>$surahNumber. $surahName</option>";
                 }
             }

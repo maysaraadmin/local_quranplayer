@@ -14,13 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$string['pluginname'] = 'Local Quran Player';
-$string['quranplayer'] = 'Quran Player';
-$string['selectfile'] = 'Select a chapter to play:';
-$string['qurantext'] = 'Quran Text';
-$string['noaudiofiles'] = 'No audio files found.';
-$string['nodirectory'] = 'MP3 directory not found.';
-$string['noqurantext'] = 'Quran text file not found.';
-$string['noaudio'] = 'Your browser does not support the audio element.';
-$string['mp3path'] = 'MP3 Path';
-$string['mp3path_desc'] = 'The path to the directory containing the Quran MP3 files.';
+require_once('../../config.php');
+require_once($CFG->dirroot . '/local/quranplayer/lib.php');
+
+defined('MOODLE_INTERNAL') || die();
+
+require_login();
+if (!has_capability('local/quranplayer:view', context_system::instance())) {
+    throw new moodle_exception('nopermissiontoviewpage', 'error');
+}
+
+$PAGE->set_context(context_system::instance());
+$PAGE->set_url(new moodle_url('/local/quranplayer/index.php'));
+$PAGE->set_title(get_string('pluginname', 'local_quranplayer'));
+$PAGE->set_heading(get_string('pluginname', 'local_quranplayer'));
+
+echo $OUTPUT->header();
+echo local_quranplayer::render_player();
+echo $OUTPUT->footer();
