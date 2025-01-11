@@ -68,12 +68,12 @@ class local_quranplayer {
 
         $html = <<<HTML
 <div class="local-quranplayer">
-    <label for="quranplayer-select">{{#str}}selectfile, local_quranplayer{{/str}}</label>
+    <label for="quranplayer-select">{{selectfile}}</label>
     <select id="quranplayer-select">
         $options
     </select>
     <div id="quran-text">
-        <h3>{{#str}}qurantext, local_quranplayer{{/str}}</h3>
+        <h3>{{qurantext}}</h3>
         <pre id="quran-content"></pre>
     </div>
     <audio id="quranplayer" controls>
