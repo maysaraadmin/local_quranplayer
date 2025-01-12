@@ -17,9 +17,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
+    // Create a new settings page for the plugin.
     $settings = new admin_settingpage('local_quranplayer', get_string('pluginname', 'local_quranplayer'));
+
+    // Add the settings page to the "Local plugins" category.
     $ADMIN->add('localplugins', $settings);
 
+    // Add the MP3 path setting.
     $settings->add(new admin_setting_configtext(
         'local_quranplayer/mp3path',
         get_string('mp3path', 'local_quranplayer'),
@@ -28,10 +32,18 @@ if ($hassiteconfig) {
         PARAM_TEXT
     ));
 
+    // Add the logging setting.
     $settings->add(new admin_setting_configcheckbox(
         'local_quranplayer/enablelogging',
         get_string('enablelogging', 'local_quranplayer'),
         get_string('enablelogging_desc', 'local_quranplayer'),
         0
+    ));
+
+    // Add a link to the Quran player page (index.php).
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_quranplayer_index',
+        get_string('quranplayer', 'local_quranplayer'),
+        new moodle_url('/local/quranplayer/index.php')
     ));
 }

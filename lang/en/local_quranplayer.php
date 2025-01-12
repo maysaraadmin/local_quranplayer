@@ -16,6 +16,7 @@
 
 $string['pluginname'] = 'Local Quran Player';
 $string['quranplayer'] = 'Quran Player';
+$string['settings'] = 'Settings'; // Add this line
 $string['selectfile'] = 'Select a chapter to play:';
 $string['qurantext'] = 'Quran Text';
 $string['noaudiofiles'] = 'No audio files found. Please check the MP3 directory.';
